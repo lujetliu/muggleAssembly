@@ -28,8 +28,7 @@ read_record:
 	movl ST_READ_BUFFER(%ebp), %ecx
 	movl $RECORD_SIZE, %edx
 	movl $SYS_READ, %eax
-	
-	int $LINUX_SYSCALL
+	nt $LINUX_SYSCALL
 
 	popl %ebx # %eax 中含返回值, 将该值传回调用程序
 

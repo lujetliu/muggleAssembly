@@ -47,7 +47,7 @@ record2:
 	
 	.long 29
 
-record2:
+record3:
 	.ascii "Derrick\0"
 	.rept 32 # 填充到40字节
 	.byte 0
@@ -77,6 +77,36 @@ _start:
 	
 	# 打开文件
 	movl $SYS_OPEN, %eax
+	movl $file_name, %ebx
+	movl $0101, %ecx
+	movl $0666, %edx
+	
+
+	movl %eax, FILE_DESCRIPTOR(%ebp)
+	
+	pushl FILE_DESCRIPTOR(%ebp)
+	pushl $record1
+	call write_record
+	addl $8, %esp
+	
+
+	pushl FILE_DESCRIPTOR(%ebp)
+	pushl $record2
+	call write_record
+	addl $8, %esp
+
+	pushl FILE_DESCRIPTOR(%ebp)
+	pushl $record3
+	call write_record
+	addl $8, %esp
+
+	movl $SYS_CLOSE, %eax
+	movl FILE_DESCRIPTOR(%ebp), %ebx
+	int $LINUX_SYSCALL
+
+	movl $SYS_EXIT, %eax
+	movl $0, %ebx
+	int $LINUX_SYSCALL
 
 
 
